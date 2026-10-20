@@ -174,7 +174,7 @@ namespace ArenaSurvivor.UI
 
             _scoreText = CreateText(_hudPanel.transform, "Pontos: 0", 40, new Color(1f, 0.9f, 0.3f),
                 new Vector2(0f, 0f), new Vector2(400f, 60f));
-            AnchorTopRight(_scoreText.rectTransform, 30f);
+            AnchorTopRight(_scoreText.rectTransform, 30f, 30f);
         }
 
         void BuildEndPanel(bool victory)
