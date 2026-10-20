@@ -39,9 +39,19 @@ namespace ArenaSurvivor.Core
             SetupCamera();
             SfxManager.Create(transform);
             Waves = gameObject.AddComponent<WaveManager>();
-            UI = UIManager.Create(this);
+            UI = FindFirstObjectByType<UIManager>();
+            if (UI == null)
+                Debug.LogError("UIManager não encontrado na cena! Crie a interface no editor e adicione o componente UIManager.");
             Player = CreatePlayer();
-            UI.ShowMenu();
+            if (UI != null)
+                UI.Bind(this);
+            else
+                ShowMenuFallback();
+        }
+
+        void ShowMenuFallback()
+        {
+            State = GameState.Menu;
         }
 
         void SetupCamera()
@@ -93,11 +103,11 @@ namespace ArenaSurvivor.Core
             ClearLevel();
             Score = 0;
             CurrentWave = 0;
-            UI.SetScore(0);
-            UI.SetWave(0);
+            UI?.SetScore(0);
+            UI?.SetWave(0);
             Player.ResetPlayer();
             State = GameState.Playing;
-            UI.ShowHUD();
+            UI?.ShowHUD();
             Waves.StartWaves();
         }
 
@@ -107,7 +117,7 @@ namespace ArenaSurvivor.Core
             State = GameState.Victory;
             ClearLevel();
             SfxManager.Instance.Play("victory");
-            UI.ShowVictory(Score);
+            UI?.ShowVictory(Score);
         }
 
         public void GameOver()
@@ -116,7 +126,7 @@ namespace ArenaSurvivor.Core
             State = GameState.GameOver;
             ClearLevel();
             SfxManager.Instance.Play("gameOver");
-            UI.ShowGameOver(Score);
+            UI?.ShowGameOver(Score);
         }
 
         public void GoToMenu()
@@ -124,7 +134,7 @@ namespace ArenaSurvivor.Core
             SfxManager.Instance.Play("click");
             State = GameState.Menu;
             ClearLevel();
-            UI.ShowMenu();
+            UI?.ShowMenu();
         }
 
         public void QuitGame()
@@ -140,13 +150,13 @@ namespace ArenaSurvivor.Core
         public void AddScore(int amount)
         {
             Score += amount;
-            UI.SetScore(Score);
+            UI?.SetScore(Score);
         }
 
         public void SetWave(int wave)
         {
             CurrentWave = wave;
-            UI.SetWave(wave);
+            UI?.SetWave(wave);
         }
 
         void ClearLevel()

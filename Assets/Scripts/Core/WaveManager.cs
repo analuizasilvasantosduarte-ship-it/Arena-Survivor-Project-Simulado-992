@@ -45,7 +45,7 @@ namespace ArenaSurvivor.Core
             {
                 var waveNumber = i + 1;
                 gm.SetWave(waveNumber);
-                gm.UI.ShowAnnouncement("ONDA " + waveNumber, 1.6f);
+                Announce("ONDA " + waveNumber, 1.6f);
                 SfxManager.Instance.Play("wave");
                 yield return new WaitForSeconds(1.2f);
 
@@ -60,7 +60,7 @@ namespace ArenaSurvivor.Core
 
                 if (i < WaveSizes.Length - 1)
                 {
-                    gm.UI.ShowAnnouncement("ONDA " + waveNumber + " ELIMINADA", 1.6f);
+                    Announce("ONDA " + waveNumber + " ELIMINADA", 1.6f);
                     yield return new WaitForSeconds(DelayBetweenWaves);
                 }
             }
@@ -73,6 +73,13 @@ namespace ArenaSurvivor.Core
             var position = GetSpawnPosition();
             var enemy = Enemy.Create(position, waveNumber);
             _alive++;
+        }
+
+        void Announce(string message, float duration)
+        {
+            var ui = GameManager.Instance.UI;
+            if (ui != null)
+                ui.ShowAnnouncement(message, duration);
         }
 
         Vector2 GetSpawnPosition()

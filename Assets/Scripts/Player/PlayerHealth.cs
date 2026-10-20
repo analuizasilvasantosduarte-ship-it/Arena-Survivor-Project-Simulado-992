@@ -33,7 +33,9 @@ namespace ArenaSurvivor.Player
             if (rb != null)
                 rb.velocity = Vector2.zero;
             gameObject.SetActive(true);
-            GameManager.Instance.UI.SetHealth(Current, MaxHealth);
+            var ui = GameManager.Instance.UI;
+            if (ui != null)
+                ui.SetHealth(Current, MaxHealth);
         }
 
         public void TakeDamage(int damage)
@@ -43,7 +45,9 @@ namespace ArenaSurvivor.Player
 
             _lastDamageTime = Time.time;
             Current = Mathf.Max(0, Current - damage);
-            GameManager.Instance.UI.SetHealth(Current, MaxHealth);
+            var ui = GameManager.Instance.UI;
+            if (ui != null)
+                ui.SetHealth(Current, MaxHealth);
             SfxManager.Instance.Play("playerHurt");
             StartCoroutine(FlashRoutine());
 
